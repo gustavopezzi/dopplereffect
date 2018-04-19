@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+    <head>
+        <title>FMOD Doppler Effect (Lab)</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <link href="css/fonts.css" rel="stylesheet">
+        <link href="css/base.css" rel="stylesheet">
+        <script>
+            var emitterTransform = {
+                x: 0,
+                y: 0,
+                z: 0,
+                width: 30,
+                height: 54
+            };
+            var listenerTransform = {
+                x: 330,
+                y: 330,
+                z: 100,
+                width: 24,
+                height: 24
+            };
+            var ranOver = false;
+        </script>
+        <script src="js/jquery.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="js/fmod.js"></script>
+        <script src="js/movement.js"></script>
+        <script src="js/doppler.js"></script>
+    </head>
+    <body>
+        <canvas id="canvas"></canvas>
+        <div id="container">
+            <br />
+            <div id="info-dsp" class="info-label">Loading FMOD and audio files. Please wait...</div>
+            <div id="info-mixer" class="info-label"></div>
+            <div id="info-emitter" class="info-label"></div>
+            <div id="info-listener" class="info-label"></div>
+        </div>
+    </body>
+</html>
