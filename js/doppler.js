@@ -239,8 +239,8 @@ function updateApplication() {
     pos.x = listenerTransform.x;
     pos.y = listenerTransform.z;
     pos.z = listenerTransform.y;
-    vel.x = (pos.x - lastListenerPosition.x) / 50;              // setinterval is set to 20ms, so 50 times a second.   We need units moved per second, not per update.
-    vel.z = (pos.z - lastListenerPosition.z) / 50;              // setinterval is set to 20ms, so 50 times a second.   We need units moved per second, not per update.
+    vel.x = (pos.x - lastListenerPosition.x) / 50; // setinterval is set to 20ms, so 50 times a second. We need units moved per second, not per update.
+    vel.z = (pos.z - lastListenerPosition.z) / 50; // setinterval is set to 20ms, so 50 times a second. We need units moved per second, not per update.
     update3DPosition("listener", pos, vel)
     lastListenerPosition.x = pos.x;
     lastListenerPosition.y = pos.y;
@@ -249,8 +249,8 @@ function updateApplication() {
     pos.x = emitterTransform.x;
     pos.y = emitterTransform.z;
     pos.z = emitterTransform.y;
-    vel.x = (pos.x - lastEmitterPosition[0].x) / 50;           // setinterval is set to 20ms, so 50 times a second.   We need units moved per second, not per update.
-    vel.z = (pos.z - lastEmitterPosition[0].z) / 50;           // setinterval is set to 20ms, so 50 times a second.   We need units moved per second, not per update.
+    vel.x = (pos.x - lastEmitterPosition[0].x) / 50; // setinterval is set to 20ms, so 50 times a second. We need units moved per second, not per update.
+    vel.z = (pos.z - lastEmitterPosition[0].z) / 50; // setinterval is set to 20ms, so 50 times a second. We need units moved per second, not per update.
     update3DPosition("emitter", pos, vel)
     lastEmitterPosition[0].x = pos.x;
     lastEmitterPosition[0].z = pos.z;
