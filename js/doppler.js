@@ -255,8 +255,6 @@ function updateApplication() {
     lastEmitterPosition[0].x = pos.x;
     lastEmitterPosition[0].z = pos.z;
 
-
-
     // Update FMOD
     result = gSystem.update();
     CHECK_RESULT(result);
