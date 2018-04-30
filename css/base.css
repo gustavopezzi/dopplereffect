@@ -36,6 +36,10 @@ body {
     top: 100px;
 }
 
+#info-speed {
+    top: 120px;
+}
+
 #canvas {
     display: none;
     width: 100%;

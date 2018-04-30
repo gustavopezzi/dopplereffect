@@ -13,8 +13,11 @@ FMODModule(FMOD);                    // Calling the constructor function with ou
 var gSystem;                  // Global 'System' object which has the top level API functions. Sounds and channels are created from this.
 var gSound = {};              // Array of sounds.
 var gChannel = {};            // Array of channels. 1 for each sound.
+var gDSPEffect = {};          // Array of effect handles.
 var lastListenerPosition;     // Remember the previous listener position to calculate movement delta.
 var lastEmitterPosition = {}; // Remember previous emitter positions to calculate movement deltas.
+var emitterSpeed = 0;         // Emitter speed
+var BYPASS_FILTER = true;     // Flag to bypass the DSP filter controlled by the velocity
 var gIOSInitialized  = false; // Boolean to avoid resetting FMOD on IOS every time screen is touched.
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -147,9 +150,31 @@ function initApplication() {
 
     // Create a sound that loops
     var soundOut = {};
+    var effectOut = {};
+
     var result = gSystem.createSound("engine.wav", FMOD.LOOP_NORMAL | FMOD._3D, null, soundOut);
     CHECK_RESULT(result);
     gSound[0] = soundOut.val;
+
+    // create a filter to be controlled by the car speed
+    result = gSystem.createDSPByType(FMOD.DSP_TYPE_LOWPASS, effectOut);
+    CHECK_RESULT(result);
+    gDSPEffect[0] = effectOut.val;
+
+    var mcgout = {};
+    var mastergroup;
+
+    result = gSystem.getMasterChannelGroup(mcgout);
+    CHECK_RESULT(result);
+    mastergroup = mcgout.val;
+
+    // bypass all effects by default
+    result = gDSPEffect[0].setBypass(false);
+    CHECK_RESULT(result);
+
+    // add the dsp effect to the head of the master channelgroup bus
+    result = mastergroup.addDSP(FMOD.CHANNELCONTROL_DSP_HEAD, gDSPEffect[0]);
+    CHECK_RESULT(result);
 
     // Our units are pixels, so lets scale the min and max distance to pixels as units.
     result = gSound[0].set3DMinMaxDistance(100.0, 100000.0);
@@ -221,7 +246,6 @@ function updateApplication() {
         "hz : DSP buffer size = " + numbuffers.val +
         " buffers of " + buffersize.val +
         " samples (" + ms.toFixed(2) + " ms)";
-
     document.getElementById("info-emitter").innerHTML =
         "Emitter position: [" +
         parseInt(emitterTransform.x, 10) + ", " +
@@ -232,6 +256,8 @@ function updateApplication() {
         parseInt(listenerTransform.x, 10) + ", " +
         parseInt(listenerTransform.y, 10) + ", " +
         parseInt(listenerTransform.z, 10) + "]";
+    document.getElementById("info-speed").innerHTML =
+        "Emitter speed: " + parseInt(emitterSpeed, 10);
 
     var pos  = FMOD.VECTOR();
     var vel  = FMOD.VECTOR();

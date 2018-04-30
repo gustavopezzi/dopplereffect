@@ -61,6 +61,10 @@ $(document).ready(function() {
         $(document).keyup(onKeyUp);
 
         function onKeyDown(evt) {
+            if (evt.keyCode == 66)
+                BYPASS_FILTER = true;
+            if (evt.keyCode == 70)
+                BYPASS_FILTER = false;
             if (evt.keyCode == 39)
                 KEY_R = true;
             else if (evt.keyCode == 37)
@@ -103,8 +107,6 @@ $(document).ready(function() {
         }
 
         function checkCollision(rect1, rect2) {
-            console.log(rect1.x, rect1.y, rect1.width, rect1.height);
-            console.log(rect2.x, rect2.y, rect2.width, rect2.height);
             if (
                 rect1.x < rect2.x + rect2.width &&
                 rect1.x + rect1.width > rect2.x &&
@@ -122,10 +124,12 @@ $(document).ready(function() {
 
         function move() {
             if (KEY_F && car.speed < car.maxSpeed) {
-                if (car.speed < 0)
+                if (car.speed < 0) {
                     car.speed += car.dec;
-                else
+                }
+                else {
                     car.speed += car.acc;
+                }
             }
             else if (KEY_B && car.speed > (-1 * car.maxSpeed)) {
                 if (car.speed > 0)
@@ -197,7 +201,6 @@ $(document).ready(function() {
             clear();
 
             if (checkCollision(emitterTransform, listenerTransform)) {
-                console.log(ranOver);
                 ranOver = true;
             }
 
@@ -218,6 +221,20 @@ $(document).ready(function() {
             ctx.rotate(car.angle);
             ctx.drawImage(carImg, -15, -27);
             ctx.restore();
+
+            if (!gDSPEffect || gDSPEffect.length == 0 || !gDSPEffect[0]) {
+                return;
+            }
+
+            result = gDSPEffect[0].setBypass(BYPASS_FILTER);
+            CHECK_RESULT(result);
+
+            emitterSpeed = car.speed;
+            result = gDSPEffect[0].setParameterFloat(FMOD.DSP_LOWPASS_CUTOFF, (Math.abs(emitterSpeed) + 1) * 1000.0);
+            CHECK_RESULT(result);
+
+            result = gDSPEffect[0].setParameterFloat(FMOD.DSP_LOWPASS_RESONANCE, 2.0);
+            CHECK_RESULT(result);
         }
     }
 
